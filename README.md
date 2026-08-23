@@ -2,7 +2,7 @@
 
 A web-based tool to create timelapse videos from a sequence of photos.
 
-![Timelapse Studio Screenshot](docs\screenshot.png)
+![Timelapse Studio Screenshot](docs/screenshot.png)
 
 ## Features
 - **Batch Upload**: Upload hundreds of photos at once.
