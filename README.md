@@ -1,6 +1,6 @@
 # Timelapse Studio
 
-A web-based tool to create smooth timelapse videos from a sequence of photos.
+A web-based tool to create timelapse videos from a sequence of photos.
 
 ![Timelapse Studio Screenshot](docs\screenshot.png)
 
