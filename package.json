@@ -1,7 +1,7 @@
 {
   "name": "timelapse-studio",
   "version": "1.0.0",
-  "description": "A web-based tool to create smooth timelapse videos from a sequence of photos",
+  "description": "A web-based tool to create timelapse videos from a sequence of photos",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
