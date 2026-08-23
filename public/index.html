@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timelapse Studio</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polygon points="10 8 16 12 10 16 10 8"></polygon>
+        </svg>
+        <span>Timelapse<b>Studio</b></span>
+      </div>
+      <div class="status-badge" id="appStatus">Ready</div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="workspace">
+      <!-- Left Column: Upload & Settings -->
+      <section class="controls-panel">
+        
+        <!-- Step 1: Upload Dropzone -->
+        <div class="card upload-card">
+          <div class="card-header">
+            <span class="step-num">1</span>
+            <h2>Upload Photos</h2>
+            <span class="sub-text">Supports 700+ photos in one go</span>
+          </div>
+
+          <div class="dropzone" id="dropzone">
+            <input type="file" id="fileInput" multiple accept="image/*" class="file-input">
+            <div class="dropzone-content">
+              <div class="upload-icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+              </div>
+              <p class="primary-text">Drag & Drop photo sequence here</p>
+              <p class="secondary-text">or <span class="browse-btn">browse files</span> from your computer</p>
+              <p class="hint-text">JPG, PNG, WEBP, TIFF (Unlimited photos / any resolution)</p>
+            </div>
+          </div>
+
+          <!-- Upload Progress -->
+          <div class="upload-progress-container hidden" id="uploadProgressBox">
+            <div class="progress-info">
+              <span id="uploadStatusText">Uploading 0 / 0 photos...</span>
+              <span id="uploadPercent">0%</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" id="uploadBarFill" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <!-- Session Summary -->
+          <div class="session-summary hidden" id="sessionSummary">
+            <div class="stat-pill">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+              </svg>
+              <span id="statFrameCount">0 Photos Loaded</span>
+            </div>
+            <button class="btn-text danger" id="btnClearSession">Clear Photos</button>
+          </div>
+        </div>
+
+        <!-- Step 2: Configure Parameters -->
+        <div class="card settings-card">
+          <div class="card-header">
+            <span class="step-num">2</span>
+            <h2>Timelapse Settings</h2>
+          </div>
+
+          <!-- Frame Rate (FPS) -->
+          <div class="setting-group">
+            <label class="setting-label">Frame Rate (FPS)</label>
+            <div class="fps-pills">
+              <button class="pill-btn" data-fps="12">12 FPS</button>
+              <button class="pill-btn" data-fps="24">24 FPS</button>
+              <button class="pill-btn active" data-fps="30">30 FPS</button>
+              <button class="pill-btn" data-fps="60">60 FPS</button>
+              <div class="custom-fps-wrapper">
+                <input type="number" id="customFpsInput" min="1" max="120" placeholder="Custom" class="input-field fps-input">
+              </div>
+            </div>
+          </div>
+
+          <!-- Resolution & Format Grid -->
+          <div class="grid-2col">
+            <div class="setting-group">
+              <label for="resSelect" class="setting-label">Output Resolution</label>
+              <select id="resSelect" class="select-field">
+                <option value="1080p" selected>1080p Full HD (1920x1080)</option>
+                <option value="4k">4K Ultra HD (3840x2160)</option>
+                <option value="720p">720p HD (1280x720)</option>
+                <option value="original">Original Aspect Ratio</option>
+              </select>
+            </div>
+
+            <div class="setting-group">
+              <label for="formatSelect" class="setting-label">Video Format</label>
+              <select id="formatSelect" class="select-field">
+                <option value="mp4" selected>MP4 (H.264 - Best Compatibility)</option>
+                <option value="webm">WebM (VP9 - Web Standard)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid-2col">
+            <div class="setting-group">
+              <label for="aspectSelect" class="setting-label">Aspect Scaling</label>
+              <select id="aspectSelect" class="select-field">
+                <option value="contain" selected>Fit Frame (Black Letterbox)</option>
+                <option value="cover">Crop to Fill Frame</option>
+                <option value="stretch">Stretch to Fit</option>
+              </select>
+            </div>
+
+            <div class="setting-group">
+              <label for="qualitySelect" class="setting-label">Render Quality</label>
+              <select id="qualitySelect" class="select-field">
+                <option value="high">High Quality (CRF 18)</option>
+                <option value="medium" selected>Balanced (CRF 23)</option>
+                <option value="fast">Fast Encoding (CRF 28)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Estimated Duration Calculation -->
+          <div class="duration-estimate">
+            <span>Estimated Video Length:</span>
+            <strong id="estimatedDuration">0.0 seconds</strong>
+          </div>
+
+          <!-- Action Button -->
+          <button id="btnRender" class="btn-primary" disabled>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            Generate Timelapse Video
+          </button>
+        </div>
+
+      </section>
+
+      <!-- Right Column: Preview & Results -->
+      <section class="preview-panel">
+        <div class="card preview-card">
+          <div class="card-header">
+            <h2>Video Preview & Result</h2>
+          </div>
+
+          <!-- Rendering Progress Box -->
+          <div class="render-progress-box hidden" id="renderProgressBox">
+            <div class="spinner-container">
+              <div class="spinner"></div>
+            </div>
+            <div class="render-status">
+              <h3 id="renderPhaseText">Encoding Timelapse...</h3>
+              <p id="renderDetailsText">Processing frame 0 of 0</p>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill render-fill" id="renderBarFill" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <!-- Video Player Output -->
+          <div class="video-container hidden" id="videoContainer">
+            <video id="videoPlayer" controls autoplay loop playsinline></video>
+            <div class="video-controls-bar">
+              <a id="btnDownload" class="btn-success" download>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Download Video
+              </a>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div class="empty-state" id="emptyState">
+            <div class="placeholder-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                <line x1="7" y1="2" x2="7" y2="22"></line>
+                <line x1="17" y1="2" x2="17" y2="22"></line>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <line x1="2" y1="7" x2="7" y2="7"></line>
+                <line x1="2" y1="17" x2="7" y2="17"></line>
+                <line x1="17" y1="17" x2="22" y2="17"></line>
+                <line x1="17" y1="7" x2="22" y2="7"></line>
+              </svg>
+            </div>
+            <p>Upload photos on the left to start generating your timelapse video.</p>
+          </div>
+
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
