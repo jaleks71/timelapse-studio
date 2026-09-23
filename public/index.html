@@ -25,45 +25,107 @@
 
     <!-- Main Workspace -->
     <main class="workspace">
-      <!-- Left Column: Upload & Settings -->
+      <!-- Left Column: Source Selection & Settings -->
       <section class="controls-panel">
         
-        <!-- Step 1: Upload Dropzone -->
+        <!-- Step 1: Photos Source Selection -->
         <div class="card upload-card">
           <div class="card-header">
             <span class="step-num">1</span>
-            <h2>Upload Photos</h2>
-            <span class="sub-text">Supports thousands of photos in one go</span>
+            <h2>Select Photos</h2>
+            <span class="sub-text">Upload or select folder directly</span>
           </div>
 
-          <div class="dropzone" id="dropzone">
-            <input type="file" id="fileInput" multiple accept="image/*" class="file-input">
-            <div class="dropzone-content">
-              <div class="upload-icon">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="17 8 12 3 7 8"></polyline>
-                  <line x1="12" y1="3" x2="12" y2="15"></line>
-                </svg>
+          <!-- Source Tabs -->
+          <div class="source-tabs">
+            <button class="source-tab active" id="tabBrowserUpload" type="button">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              Upload Photos / Folder
+            </button>
+            <button class="source-tab" id="tabLocalFolder" type="button">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+              </svg>
+              Local Folder on Disk <span class="badge-fast">Fastest (3k+)</span>
+            </button>
+          </div>
+
+          <!-- Tab Content 1: Browser Upload (Files or Folder) -->
+          <div class="tab-pane active" id="paneBrowserUpload">
+            <div class="dropzone" id="dropzone">
+              <input type="file" id="fileInput" multiple accept="image/*" class="file-input-hidden">
+              <input type="file" id="folderInput" webkitdirectory directory multiple class="file-input-hidden">
+              
+              <div class="dropzone-content">
+                <div class="upload-icon">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                </div>
+                <p class="primary-text">Drag & drop photo files or an entire folder here</p>
+                <div class="picker-buttons">
+                  <button type="button" class="btn-picker" id="btnBrowseFiles">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                      <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                      <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    Select Photos
+                  </button>
+                  <button type="button" class="btn-picker" id="btnBrowseFolder">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Select Folder
+                  </button>
+                </div>
+                <p class="hint-text">Adaptive chunking & auto-retries for 3,000+ photos (JPG, PNG, WEBP, BMP, TIFF)</p>
               </div>
-              <p class="primary-text">Drag & Drop photo sequence here</p>
-              <p class="secondary-text">or <span class="browse-btn">browse files</span> from your computer</p>
-              <p class="hint-text">JPG, PNG, WEBP, TIFF (Unlimited photos / any resolution)</p>
+            </div>
+
+            <!-- Upload Progress Box -->
+            <div class="upload-progress-container hidden" id="uploadProgressBox">
+              <div class="progress-info">
+                <span id="uploadStatusText">Uploading 0 / 0 photos...</span>
+                <span id="uploadPercent">0%</span>
+              </div>
+              <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="uploadBarFill" style="width: 0%;"></div>
+              </div>
+              <div class="progress-sub-info">
+                <span id="uploadSubStatus" class="sub-status-text">Preparing batch...</span>
+                <button type="button" class="btn-link danger" id="btnCancelUpload">Cancel</button>
+              </div>
             </div>
           </div>
 
-          <!-- Upload Progress -->
-          <div class="upload-progress-container hidden" id="uploadProgressBox">
-            <div class="progress-info">
-              <span id="uploadStatusText">Uploading 0 / 0 photos...</span>
-              <span id="uploadPercent">0%</span>
-            </div>
-            <div class="progress-bar-track">
-              <div class="progress-bar-fill" id="uploadBarFill" style="width: 0%;"></div>
+          <!-- Tab Content 2: Local Folder on Disk (Instant scanning for 3000+ photos) -->
+          <div class="tab-pane hidden" id="paneLocalFolder">
+            <div class="local-folder-box">
+              <p class="local-folder-desc">
+                Ideal for large collections (3,000+ photos). Reads directly from your local disk without uploading or duplicating files.
+              </p>
+              <div class="folder-input-wrapper">
+                <input type="text" id="localFolderPathInput" class="input-field" placeholder="e.g. E:\timelapse-studio\test_photos" spellcheck="false">
+                <button type="button" class="btn-action" id="btnScanFolder">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  Scan Folder
+                </button>
+              </div>
+              <p class="hint-text">Paste the full path to your photos directory on this computer.</p>
             </div>
           </div>
 
-          <!-- Session Summary -->
+          <!-- Active Source Summary Pill -->
           <div class="session-summary hidden" id="sessionSummary">
             <div class="stat-pill">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -73,7 +135,49 @@
               </svg>
               <span id="statFrameCount">0 Photos Loaded</span>
             </div>
-            <button class="btn-text danger" id="btnClearSession">Clear Photos</button>
+            <button class="btn-text danger" id="btnClearSession">Clear / Change</button>
+          </div>
+        </div>
+
+        <!-- Step 1.5: Photo Sequence Verification & Ordering (Crucial for verifying oldest first) -->
+        <div class="card verification-card hidden" id="sequenceVerificationCard">
+          <div class="card-header">
+            <span class="step-num step-success">✓</span>
+            <h2>Verify Photo Sequence & Order</h2>
+            <span class="sub-text" id="sequenceOrderBadge">Oldest First</span>
+          </div>
+
+          <div class="verification-description">
+            <p>Verify that your timelapse begins with the <strong>oldest photo</strong>. Preview key moments across the sequence below:</p>
+          </div>
+
+          <!-- Keyframe Preview Filmstrip -->
+          <div class="keyframe-filmstrip" id="keyframeFilmstrip">
+            <!-- Dynamic Keyframe Cards (0%, 25%, 50%, 75%, 100%) -->
+          </div>
+
+          <!-- Sequence Controls Bar -->
+          <div class="sequence-controls-bar">
+            <div class="order-toggle-group">
+              <span class="order-label">Sort Order:</span>
+              <button type="button" class="order-btn active" id="btnSortAsc" data-order="asc">
+                Oldest First (A → Z)
+              </button>
+              <button type="button" class="order-btn" id="btnSortDesc" data-order="desc">
+                Newest First (Z → A)
+              </button>
+            </div>
+            <button type="button" class="btn-secondary" id="btnInspectSequence">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                <line x1="3" y1="18" x2="3.01" y2="18"></line>
+              </svg>
+              Inspect All Photos
+            </button>
           </div>
         </div>
 
@@ -206,12 +310,51 @@
                 <line x1="17" y1="7" x2="22" y2="7"></line>
               </svg>
             </div>
-            <p>Upload photos on the left to start generating your timelapse video.</p>
+            <p>Upload photos or select a local folder on the left to start generating your timelapse video.</p>
           </div>
 
         </div>
       </section>
     </main>
+  </div>
+
+  <!-- Sequence Inspection Modal -->
+  <div class="modal-overlay hidden" id="sequenceModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h3>Full Photo Sequence Inspection</h3>
+          <span class="modal-count-badge" id="modalTotalBadge">0 photos</span>
+        </div>
+        <button type="button" class="btn-close" id="btnCloseModal">&times;</button>
+      </div>
+      <div class="modal-search-bar">
+        <input type="text" id="modalSearchInput" class="input-field" placeholder="Search filenames...">
+      </div>
+      <div class="modal-table-container">
+        <table class="sequence-table">
+          <thead>
+            <tr>
+              <th style="width: 70px;">#</th>
+              <th>Filename</th>
+              <th style="width: 140px;">Order Position</th>
+              <th style="width: 90px;">Size</th>
+            </tr>
+          </thead>
+          <tbody id="sequenceTableBody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <div class="pagination-controls">
+          <button type="button" class="btn-pagination" id="btnPrevPage">Previous</button>
+          <span id="pageInfoText">Page 1 of 1</span>
+          <button type="button" class="btn-pagination" id="btnNextPage">Next</button>
+        </div>
+        <button type="button" class="btn-secondary" id="btnCloseModalFooter">Close</button>
+      </div>
+    </div>
   </div>
 
   <script src="app.js"></script>

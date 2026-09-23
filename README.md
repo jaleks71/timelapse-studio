@@ -5,7 +5,14 @@ A web-based tool to create timelapse videos from a sequence of photos.
 ![Timelapse Studio Screenshot](docs/screenshot.png)
 
 ## Features
-- **Batch Upload**: Upload hundreds of photos at once.
+- **Massive Photo Sequences**: Effortlessly handles 3,000+ photos with adaptive chunking, automatic network retries, and cancellation controls.
+- **Select Entire Folders**: Pick a whole directory using the folder browser button, drag and drop entire folders, or scan local directories on disk directly.
+- **Direct Local Folder Mode**: Instantaneous loading for thousands of photos directly from your hard drive with zero upload wait and zero disk duplication.
+- **Photo Sequence Verification**:
+    - **Natural Sort Ordering**: Always sorts chronologically by original filename (oldest photo first, e.g., `IMG_0001` before `IMG_0002`).
+    - **Visual Keyframe Filmstrip**: Live thumbnails showing the start (oldest), 25%, 50%, 75%, and end (newest) frames before rendering.
+    - **Full Sequence Inspector**: Search and inspect the exact order of all photos across pages.
+    - **Sort Order Toggle**: Switch between Oldest First (A → Z) and Newest First (Z → A).
 - **Customizable Settings**:
     - Frame Rate (FPS)
     - Output Resolution (1080p, 4K, 720p, Original)
@@ -41,10 +48,16 @@ A web-based tool to create timelapse videos from a sequence of photos.
     Open your browser and navigate to `http://localhost:3000`.
 
 ## Usage
-1.  Drag and drop your sequence of photos into the upload area.
-2.  Adjust your desired settings (FPS, Resolution, etc.).
-3.  Click **"Generate Timelapse Video"**.
-4.  Once finished, your video will appear in the preview panel for viewing and downloading.
+1.  **Choose your photos source**:
+    - **Browser Upload**: Drag and drop photos or an entire folder, or click **"Select Photos"** / **"Select Folder"**.
+    - **Local Folder on Disk** *(Recommended for 3,000+ photos)*: Switch to the **Local Folder on Disk** tab, paste the folder path, and click **"Scan Folder"** for instant loading.
+2.  **Verify the photo sequence**:
+    - Inspect the **Keyframe Preview Filmstrip** (Start, 25%, 50%, 75%, End) to verify that the oldest photo plays first.
+    - Confirm the sort order is set to **Oldest First (A → Z)** (or click **Newest First** if needed).
+    - Optionally click **"Inspect All Photos"** to search and view the full sequence list.
+3.  **Adjust timelapse settings** (FPS, Resolution, Quality, Format).
+4.  Click **"Generate Timelapse Video"**.
+5.  Watch real-time frame encoding progress, then preview and download your video.
 
 ## Development & Testing
 
